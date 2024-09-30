@@ -1,49 +1,43 @@
-const CACHE_NAME = 'recibo-cache-v1';
+const CACHE_NAME = 'recibos-cache-v1';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/favicon.ico',
-  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+  '/manifest.json',
+  'https://i.imgur.com/C9N75S2.png', // Ícono de la app
+  'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', // Librerías externas
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
 ];
 
-// Instalando Service Worker y almacenando archivos en la caché
-self.addEventListener('install', (event) => {
+// Instalación del Service Worker y almacenamiento en caché de los recursos
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
   );
 });
 
-// Activando el Service Worker y eliminando cachés anteriores si es necesario
-self.addEventListener('activate', (event) => {
+// Interceptar las solicitudes de red para devolver contenido de la caché
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
+
+// Actualizar el caché cuando hay nuevos recursos
+self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
+        cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
             return caches.delete(cacheName);
           }
         })
       );
-    })
-  );
-});
-
-// Interceptar las solicitudes de red y actualizar dinámicamente la caché
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((response) => {
-        const fetchPromise = fetch(event.request).then((networkResponse) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        });
-        return response || fetchPromise;
-      });
     })
   );
 });
