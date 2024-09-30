@@ -2,7 +2,7 @@
   "name": "Generador de Recibos",
   "short_name": "Recibos",
   "description": "Generador de comprobantes de pagos en modo offline",
-  "start_url": "index.html",
+  "start_url": "testeopwa/index.html",
   "display": "standalone",
   "background_color": "#1a1a1a",
   "theme_color": "#4a90e2",
