@@ -1,8 +1,8 @@
 const CACHE_NAME = 'recibos-cache-v1';
 const urlsToCache = [
-  'testeopwa/',
-  '/index.html',
-  '/manifest.json',
+  '/',
+  'index.html',
+  'manifest.json',
   'https://i.imgur.com/C9N75S2.png', // Ícono de la app
   'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js', // Librerías externas
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
