@@ -1,6 +1,6 @@
 const CACHE_NAME = 'recibos-cache-v1';
 const urlsToCache = [
-  '/',
+  '',
   'index.html',
   'manifest.json',
   'https://i.imgur.com/C9N75S2.png', // Ícono de la app
